@@ -10,17 +10,14 @@ class BookAdmin(admin.ModelAdmin):
 
     filter_horizontal = ["categories"]
 
-
 class BookInline(admin.TabularInline):
     model = Book
     fields = ["titulo", "ano_publicacao", "disponivel", "categories"]
     filter_horizontal = ["categories"]
     extra = 1
 
-
 class AuthorAdmin(admin.ModelAdmin):
     inlines = [BookInline]
-
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(Author, AuthorAdmin)
