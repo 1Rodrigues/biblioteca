@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    div{
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    body{
+        background-color:red;
+        color:white;
+    }
+        </style>
+</head>
+<body>
+    <div>
+        <h1>ERRO 404: PÁGINA NÃO ENCONTRADA</h1>
+        <h1>FAZ O LLLL</h1>
+    </div>
+    <script>
+        let fundoVermelho = true;
+
+        setInterval(() => {
+            fundoVermelho = !fundoVermelho;
+            document.body.style.backgroundColor = fundoVermelho ? 'red' : 'white';
+            document.body.style.color = fundoVermelho ? 'white' : 'red';
+        }, 350);
+    </script>
+</body>
+</html>
