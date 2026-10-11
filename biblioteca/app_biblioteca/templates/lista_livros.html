@@ -18,7 +18,7 @@
     <ul>
         {% for livro in lista_de_livros %}
             <li class="{% if livro.disponivel %}disponivel{% else %}indisponivel{% endif %}">
-                {{ livro.titulo }} - <span><a href="{% url 'author_detail' livro.autor.id %}">{{ livro.autor }}</a></span> {{ livro.ano_publicacao }} - {% if livro.disponivel %}disponivel{% else %}indisponivel{% endif %}
+                {{ livro.titulo }} - <span>{% for author in livro.authors.all %}<a href="{% url 'author_detail' author.id %}">{{ author }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</span> {{ livro.ano_publicacao }} - {% if livro.disponivel %}disponivel{% else %}indisponivel{% endif %}
             </li>
         {% empty %}
             <li>Nenhum livro cadastrado.</li>

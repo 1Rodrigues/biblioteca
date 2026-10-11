@@ -3,21 +3,26 @@ from .models import Book, Author, Category
 
 # Register your models here.
 class BookAdmin(admin.ModelAdmin):
-    fields = ["titulo", "autor", "ano_publicacao", "disponivel", "categories"]
-    list_display = ["titulo", "autor", "ano_publicacao", "disponivel"]
-    search_fields = ["titulo", "autor__name"]
+    fields = ["titulo", "authors", "ano_publicacao", "disponivel", "categories"]
+    list_display = ["titulo", "autores", "ano_publicacao", "disponivel"]
+    search_fields = ["titulo", "authors__name"]
     list_filter = ["disponivel", "categories"]
 
-    filter_horizontal = ["categories"]
+    filter_horizontal = ["authors", "categories"]
+
+    @admin.display(description="Autores")
+    def autores(self, obj):
+        return ", ".join(author.name for author in obj.authors.all())
+
 
 class BookInline(admin.TabularInline):
-    model = Book
-    fields = ["titulo", "ano_publicacao", "disponivel", "categories"]
-    filter_horizontal = ["categories"]
+    model = Book.authors.through
     extra = 1
+
 
 class AuthorAdmin(admin.ModelAdmin):
     inlines = [BookInline]
+
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(Author, AuthorAdmin)
