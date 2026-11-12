@@ -6,7 +6,8 @@
     <title>cadastrar autor</title>
 </head>
 <body>
-    <h1>Cadastrar Autor</h1>
+     <h1>{%if autor.pk%} Editar autor {%else%} Cadastrar Autor{%endif%}</h1>
+
     <form action = "" method="post">
         {% csrf_token %}
         {{ form }}

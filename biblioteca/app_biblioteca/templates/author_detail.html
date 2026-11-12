@@ -25,13 +25,13 @@
     </h1>
             <h2>{{author.name}}</h2>
             {% if author.nationality %}<p>Nacionalidade: {{ author.nationality }}</p>{% endif %}
-            {%for livro in author.books.all%}
             <ul>
+            {%for livro in author.books.all%}
                 <li>
-                    {{livro}}
+                    {{livro}} - <a href="{% url 'editar_livro' livro.pk %}">Editar</a>
                 </li>
-            </ul>
             {%endfor%}
+            </ul>
             <p><a href="{% url 'editar_autor' author.pk %}">Editar Autor</a></p>
 </body>
 </html>

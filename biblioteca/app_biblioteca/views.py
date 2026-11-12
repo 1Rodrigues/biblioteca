@@ -23,14 +23,17 @@ def cadastrar_autor(request, pk = None):
             return redirect('author_detail', pk=author.pk)
     else:
         form = AuthorForm(instance=author)
-    return render(request, 'cadastrar_autor.html', {'form': form})
+    return render(request, 'cadastrar_autor.html', {'form': form, 'autor': author})
 
-def cadastrar_livro(request):
+def cadastrar_livro(request, pk = None):
+    livro = None
+    if pk:
+        livro = get_object_or_404(Book, pk = pk)
     if request.method == 'POST':
-        form = ModelBookForm(request.POST)
+        form = ModelBookForm(request.POST, instance = livro)
         if form.is_valid():
             livro = form.save()
-            return redirect('listar_livros')
+            return redirect('author_detail', pk = livro.autor.pk)
     else:
-        form = ModelBookForm()
-    return render(request, 'cadastrar_livro.html', {'form': form})
+        form = ModelBookForm(instance = livro)
+    return render(request, 'cadastrar_livro.html', {'form': form, 'livro': livro})
