@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Book, Author
-
+from .forms import AuthorForm, ModelBookForm
 # Create your views here.
 def listar_livros(request):
     lista_de_livros = Book.objects.all()
@@ -10,3 +10,27 @@ def author_detail(request, pk):
     author = get_object_or_404(Author, pk=pk)
     context = {'author': author}
     return render(request,'author_detail.html' ,context)
+
+def cadastrar_autor(request, pk = None):
+    author = None
+    if pk:
+        author = get_object_or_404(Author, pk=pk)
+
+    if request.method == 'POST':
+        form = AuthorForm(request.POST, instance=author)
+        if form.is_valid():
+            author = form.save()
+            return redirect('author_detail', pk=author.pk)
+    else:
+        form = AuthorForm(instance=author)
+    return render(request, 'cadastrar_autor.html', {'form': form})
+
+def cadastrar_livro(request):
+    if request.method == 'POST':
+        form = ModelBookForm(request.POST)
+        if form.is_valid():
+            livro = form.save()
+            return redirect('listar_livros')
+    else:
+        form = ModelBookForm()
+    return render(request, 'cadastrar_livro.html', {'form': form})

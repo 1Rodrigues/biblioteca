@@ -24,6 +24,7 @@
         Detalhes do Autor
     </h1>
             <h2>{{author.name}}</h2>
+            {% if author.nationality %}<p>Nacionalidade: {{ author.nationality }}</p>{% endif %}
             {%for livro in author.books.all%}
             <ul>
                 <li>
@@ -31,5 +32,6 @@
                 </li>
             </ul>
             {%endfor%}
+            <p><a href="{% url 'editar_autor' author.pk %}">Editar Autor</a></p>
 </body>
 </html>
