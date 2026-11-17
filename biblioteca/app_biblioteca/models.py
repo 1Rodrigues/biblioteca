@@ -24,6 +24,7 @@ class Book(models.Model):
     disponivel = models.BooleanField(default=True)
     autor = models.ForeignKey(Author, null = True, on_delete=models.SET_NULL, related_name='books')
     categories = models.ManyToManyField(Category, null = True, blank=True)
+    #capa = models.ImageField()
 
     def __str__(self):
         return self.titulo

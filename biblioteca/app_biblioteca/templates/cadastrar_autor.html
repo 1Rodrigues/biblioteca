@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cadastrar autor</title>
-</head>
-<body>
-     <h1>{%if autor.pk%} Editar autor {%else%} Cadastrar Autor{%endif%}</h1>
+{% extends 'base.html' %}
 
-    <form action = "" method="post">
+{% block title %}{% if autor.pk %}Editar autor{% else %}Cadastrar autor{% endif %}{% endblock %}
+
+{% block content %}
+    <h1>{% if autor.pk %}Editar autor{% else %}Cadastrar autor{% endif %}</h1>
+
+    <form action="" method="post">
         {% csrf_token %}
         {{ form }}
-        <button type="submit">Cadastrar</button>
+        <div class="acoes">
+            <button type="submit">{% if autor.pk %}Salvar{% else %}Cadastrar{% endif %}</button>
+            <a class="btn btn-light" href="{% if autor.pk %}{% url 'author_detail' autor.pk %}{% else %}{% url 'listar_livros' %}{% endif %}">Cancelar</a>
+        </div>
     </form>
-</body>
-</html>
+{% endblock %}
