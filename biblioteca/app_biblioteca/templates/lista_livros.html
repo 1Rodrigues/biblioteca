@@ -7,7 +7,9 @@
 
     <ul class="lista">
         {% for livro in lista_de_livros %}
+
             <li class="{% if livro.disponivel %}disponivel{% else %}indisponivel{% endif %}">
+                {% if livro.capa %}<img src="{{ livro.capa.url }}" alt="Capa de {{ livro.titulo }}" style="width: 60px; height: auto;">{% endif %}
                 <div>
                     <strong class="titulo">{{ livro.titulo }}</strong>
                     <div class="muted">
@@ -23,6 +25,7 @@
         {% empty %}
             <li class="muted">Nenhum livro cadastrado.</li>
         {% endfor %}
+
     </ul>
 
     <div class="acoes">

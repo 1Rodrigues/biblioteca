@@ -1,5 +1,4 @@
 from django import forms
-from django.utils import timezone
 from .models import Book, Author
 
 
@@ -15,13 +14,14 @@ class AuthorForm(forms.ModelForm):
 class ModelBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['titulo', 'autor', 'ano_publicacao', 'disponivel', 'categories']
+        fields = ['titulo', 'autor', 'ano_publicacao', 'disponivel', 'categories', 'paginas','isbn','capa',]
         labels = {
             'titulo': 'Título',
             'autor': 'Autor',
             'ano_publicacao': 'Ano de publicação',
             'disponivel': 'Disponível',
             'categories': 'Categorias',
+            'paginas': 'Páginas',
         }
         widgets = {
             'categories': forms.CheckboxSelectMultiple,

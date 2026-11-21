@@ -51,7 +51,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'biblioteca.urls'
-
+MEDIA_ROOT = BASE_DIR/'app_biblioteca/midia'
+MEDIA_URL = '/midia/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
