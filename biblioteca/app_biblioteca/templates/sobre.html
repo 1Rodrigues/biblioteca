@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Sobre</title>
+    <style>
+
+        body {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            font-family: "Google Sans Flex", Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+        h1 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 2.5rem;
+            letter-spacing: -0.02em;
+            font-weight: 600;
+        }
+        svg {
+            width: 24px;
+        }
+        h1 a {
+            all: unset
+        }
+        svg:hover {
+            opacity: 50%;
+            cursor: pointer
+        }
+        ul {
+            list-style: none;
+            background: #fff;
+            padding: 0.5rem;
+            border-radius: 1rem;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <a href="/">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 122.88"><defs><style>.cls-1{fill-rule:evenodd;}</style></defs><title>back</title><path class="cls-1" d="M61.44,0A61.51,61.51,0,1,1,18,18,61.25,61.25,0,0,1,61.44,0Zm5,45.27A7.23,7.23,0,1,0,56.14,35.13L35,56.57a7.24,7.24,0,0,0,0,10.15l20.71,21A7.23,7.23,0,1,0,66.06,77.62l-8.73-8.87,24.86-.15a7.24,7.24,0,1,0-.13-14.47l-24.44.14,8.84-9Z"/></svg>
+        </a>
+        Sobre
+    </h1>
+    <p>Mini biblioteca feita na disciplina de Desenvolvimento de Sistemas Web.</p>
+    <ul>
+        <li>Total de livros <span>{{ total }}</span></li>
+        <li>Livros disponíveis <span>{{ disponiveis }}</span></li>
+    </ul>
+</body>
+</html>

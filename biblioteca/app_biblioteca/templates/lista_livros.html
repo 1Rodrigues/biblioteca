@@ -165,9 +165,9 @@
                   <img src="{{ livro.capa.url }}" alt="{{ livro.titulo }}">
               {% endif %}
 
-              <span class="titulo {% if not livro.disponivel %}indisponivel{% endif %}">
+              <a href="{% url 'livro_detail' livro.id %}" class="titulo {% if not livro.disponivel %}indisponivel{% endif %}">
                   {{ livro.titulo }}
-              </span>
+              </a>
                 {% for author in livro.authors.all %}
                 <div>
                     Autor(es): <a href="{% url 'author_detail' author.id %}">{{ author }}</a>{% if not forloop.last %}, {% endif %}
