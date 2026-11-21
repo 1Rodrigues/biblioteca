@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator, RegexValidator
 from .validators import ValidarAnoPublicacao
 
 # Create your models here.
@@ -27,7 +27,7 @@ class Book(models.Model):
     autor = models.ForeignKey(Author, null = True, on_delete=models.SET_NULL, related_name='books')
     categories = models.ManyToManyField(Category, null = True, blank=True)
     paginas = models.IntegerField(null=True, blank = True, validators = [MinValueValidator(1,'o livro deve ter pelo menos uma pagina'), MaxValueValidator(5000, 'o maximo de poaginas é de 5000')])
-    isbn = models.CharField(null=True, blank=True, validators = [MinLengthValidator(13,'o isbn deve ter 13 caracteres'), MaxLengthValidator(13, 'o isbn deve ter 13 caracteres')])
+    isbn = models.CharField(null=True, blank=True, validators = [RegexValidator(r'^\d{13}$','o isbn deve ter exatamente 13 dígitos')])
 
     #capa = models.ImageField()
 
