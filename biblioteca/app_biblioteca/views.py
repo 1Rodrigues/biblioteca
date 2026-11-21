@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from .models import Book, Author
 from .forms import AuthorForm, ModelBookForm
 # Create your views here.
@@ -13,6 +13,12 @@ class ListBooksView(ListView):
     model = Book
     template_name = 'lista_livros.html'
     context_object_name = 'lista_de_livros'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total_disponiveis"] = Book.objects.all().filter(disponivel=True).count()
+        return context
+
+
 
 ''''def author_detail(request, pk):
     author = get_object_or_404(Author, pk=pk)
@@ -34,6 +40,7 @@ class AutorUpdateView(UpdateView):
     model = Author
     template_name = 'cadastrar_autor.html'
     form_class = AuthorForm
+    context_object_name = 'autor'
     success_url = reverse_lazy('listar_livros')
 
 '''def cadastrar_autor(request, pk = None):
@@ -74,4 +81,13 @@ class BookUpdateView(UpdateView):
     model = Book
     template_name = 'cadastrar_livro.html'
     form_class = ModelBookForm
+    context_object_name = 'livro'
     success_url = reverse_lazy('listar_livros')
+
+class BookDeleteView(DeleteView):
+    model = Book
+    template_name = 'livro_confirm_delete.html'
+    context_object_name = 'livro'
+    success_url = reverse_lazy('listar_livros')
+
+

@@ -65,3 +65,39 @@ Outros cuidados:
 - **Guardar fora do código**: a pasta de uploads não deveria ficar dentro do app nem ir para o git.
 - **Em produção**, não usar o `static()` do `urls.py` (só funciona com `DEBUG=True`); quem serve os arquivos é o Nginx/storage.
 - Se possível, **reprocessar a imagem** (abrir e salvar de novo com o Pillow), o que remove metadados e conteúdo escondido, e passar um antivírus em sistemas mais sensíveis.
+
+## Class-Based Views - Perguntas
+
+### a) Na CreateView, quem faz o `if request.method == "POST"` que escrevíamos à mão? O que acontece quando o formulário é inválido?
+
+Quem faz é a própria classe. O `as_view()` cria a view e o método `dispatch()` olha o `request.method` e chama o método com o mesmo nome: `get()` ou `post()`. Na `CreateView` (pela `ProcessFormView`), o `get()` só monta o formulário vazio e renderiza o template, e o `post()` cria o form com os dados (`get_form()`) e chama `is_valid()`:
+
+- se for válido, chama `form_valid()`, que salva o objeto (`self.object = form.save()`) e redireciona para o `success_url`;
+- se for inválido, chama `form_invalid()`, que **não salva nada** e renderiza o mesmo template de novo com o form preenchido e os erros de cada campo (`{{ form }}` já mostra as mensagens dos validators). A resposta é um 200, não um redirect, então o usuário não perde o que digitou.
+
+### b) Por que o upload da capa continuou funcionando na CreateView sem passarmos `request.FILES` manualmente?
+
+Porque o `get_form_kwargs()` da `FormMixin` já monta os argumentos do formulário sozinho: em POST/PUT ele passa `data=self.request.POST` **e** `files=self.request.FILES` (e na `ModelFormMixin` também o `instance=self.object`). Ou seja, aquele `ModelBookForm(request.POST, request.FILES, instance=livro)` que a gente escrevia na função agora é feito pela classe. O que continua sendo nossa responsabilidade é o `enctype="multipart/form-data"` no template, sem ele o `request.FILES` chega vazio do mesmo jeito.
+
+### c) Por que o DeleteView mostra uma página de confirmação e só exclui no POST? Que problema aconteceria se a exclusão ocorresse em um GET?
+
+Porque GET deve ser uma operação "segura": só ler, sem mudar nada no servidor. No `DeleteView`, o GET só mostra o `livro_confirm_delete.html`, e a exclusão acontece no POST (`form_valid()` chama `self.object.delete()` e redireciona). Como é um POST, ele também passa pela proteção do `{% csrf_token %}`.
+
+Se apagasse no GET, qualquer coisa que abrisse o link `deletar_livro/5/` apagaria o livro: um clique sem querer, o navegador pré-carregando links, um robô de busca ou antivírus visitando as URLs, o botão de voltar/atualizar, ou outro site com um `<img src="http://.../deletar_livro/5/">` fazendo o navegador do usuário logado apagar livros sem ele saber (CSRF, já que GET não verifica o token).
+
+### d) Cite uma vantagem e uma desvantagem das CBVs em relação às FBVs. Em que situação você ainda escolheria uma função?
+
+- **Vantagem**: muito menos código repetido. Listar, detalhar, criar, editar e excluir viram poucas linhas (`model`, `template_name`, `form_class`, `success_url`), e o comportamento padrão (404 automático, `request.FILES`, form inválido, redirect) já vem pronto e testado. Dá para reaproveitar com herança e mixins (ex.: `LoginRequiredMixin`).
+- **Desvantagem**: o fluxo fica "escondido". Para mudar um detalhe é preciso saber qual método sobrescrever (`get_queryset`, `get_context_data`, `form_valid`, `get_success_url`...) e em que ordem eles são chamados, o que exige ler a documentação ou o código do Django. Para quem está começando é mais difícil de entender e de depurar do que uma função lida de cima para baixo.
+
+Eu ainda usaria uma função quando a view não segue o padrão CRUD: uma página que mexe com vários models ou vários formulários ao mesmo tempo, um endpoint simples que devolve JSON, uma ação como "marcar livro como emprestado" que só altera um campo e redireciona, ou uma página com regra muito específica, em que encaixar tudo nos métodos da classe daria mais trabalho do que escrever o `if request.method == "POST"` direto.
+
+## Observações sobre os commits
+
+A atividade pedia um commit por parte (ex.: "Parte 1: validadores"). Isso não foi seguido direito:
+
+- **`1b24514` "atualiza rotas e templates para usar modelform"**: além do ModelForm, esse commit já trocou as views de função por Class-Based Views (`ListView`, `DetailView`, `CreateView`, `UpdateView`), que é a **Parte 3**. Isso entrou antes das partes 1 e 2 e a mensagem não fala nada sobre CBV. O mesmo commit também incluiu o `base.html` e uma migration do `Author`, então não dá para separar ou desfazer só uma coisa.
+- **`066565d` "aplica validators no model livro"** (Parte 1): a mensagem não segue o padrão pedido ("Parte 1: validadores"), e o validador do ISBN entrou errado (`MinLengthValidator`/`MaxLengthValidator` aceitavam 13 letras). O ISBN só foi corrigido depois, com o `RegexValidator(r'^\d{13}$')`, que ficou junto do trabalho da Parte 2 sem commit próprio.
+- **Partes 2 e 3 ficaram sem commit** e misturadas na área de staging (upload da capa junto com a `DeleteView` e o total de livros). Também faltava a migration `0012` dos validators da `capa`. Depois elas foram separadas em commits próprios: correção do ISBN (Parte 1), upload da capa (Parte 2) e CBVs (Parte 3).
+- As imagens enviadas (`midia/capas/*.jpg`) estavam marcadas para commit. Arquivos de mídia são enviados pelos usuários e não deveriam ir para o git (ver 2.2 b), por isso ficaram de fora.
+- Na atividade anterior, mensagens como "all", "nothing" e "sccp" não descrevem a mudança, e a pasta `.idea/` (configuração do PyCharm) foi commitada em `202b7da`.

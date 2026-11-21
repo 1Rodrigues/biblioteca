@@ -6,6 +6,8 @@
     <h1>Lista de Livros</h1>
 
     <ul class="lista">
+        <p>Total de livros: {{lista_de_livros.count}}</p>
+        <p>Disponiveis: {{total_disponiveis}}</p>
         {% for livro in lista_de_livros %}
 
             <li class="{% if livro.disponivel %}disponivel{% else %}indisponivel{% endif %}">
@@ -19,7 +21,7 @@
                 </div>
                 <div>
                     <span class="badge">{% if livro.disponivel %}Disponível{% else %}Indisponível{% endif %}</span>
-                    <a href="{% url 'editar_livro' livro.pk %}">Editar</a>
+                    <a href="{% url 'editar_livro' livro.pk %}">Editar</a> <a href="{% url 'deletar_livro' livro.pk %}">Excluir</a>
                 </div>
             </li>
         {% empty %}
