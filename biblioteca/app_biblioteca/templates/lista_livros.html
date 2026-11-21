@@ -57,10 +57,21 @@
 
         .grid li::before {
             content: "";
-            height: 12rem;
-            margin-bottom: 1rem;
+            height: 18rem;
+            margin: -0.5rem -0.5rem 1rem;
             background: #f5f5f7;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
+        }
+
+        .grid li:has(img)::before {
+            display: none;
+        }
+
+        .grid li img {
+            height: 18rem;
+            margin: -0.5rem -0.5rem 1rem;
+            object-fit: cover;
+            border-radius: 1rem;
         }
 
         .titulo {
@@ -150,6 +161,9 @@
     <ul class="grid">
         {% for livro in lista_de_livros %}
             <li>
+              {% if livro.capa %}
+                  <img src="{{ livro.capa.url }}" alt="{{ livro.titulo }}">
+              {% endif %}
 
               <span class="titulo {% if not livro.disponivel %}indisponivel{% endif %}">
                   {{ livro.titulo }}

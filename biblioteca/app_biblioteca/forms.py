@@ -18,7 +18,7 @@ class CriarAuthor(forms.ModelForm):
 class CriarBook(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ["titulo", "authors", "ano_publicacao", "disponivel", "categories"]
+        fields = ["titulo", "authors", "ano_publicacao", "disponivel", "categories", "paginas", "isbn", "capa"]
 
         labels = {
             "titulo": "Título",
@@ -26,6 +26,9 @@ class CriarBook(forms.ModelForm):
             "ano_publicacao": "Ano de publicação",
             "disponivel": "Disponível",
             "categories": "Categorias",
+            "paginas": "Páginas",
+            "isbn": "ISBN",
+            "capa": "Capa",
         }
         widgets = {
             "categories": forms.CheckboxSelectMultiple(),

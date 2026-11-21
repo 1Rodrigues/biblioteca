@@ -35,7 +35,7 @@ def livro_form(request, pk=None):
     livro = get_object_or_404(Book, pk=pk) if pk else None
 
     if request.method == "POST":
-        form = CriarBook(request.POST, instance=livro)
+        form = CriarBook(request.POST, request.FILES, instance=livro)
         if form.is_valid():
             livro = form.save()
             return redirect("author_detail", pk=livro.authors.first().pk)
